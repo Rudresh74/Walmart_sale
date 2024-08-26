@@ -1,7 +1,0 @@
-{
-	"name": "SelfHosted",
-	"properties": {
-		"type": "SelfHosted",
-		"description": "To connect with localhost"
-	}
-}

@@ -1,0 +1,10 @@
+{
+	"name": "AzureKeyVaultWalmart",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://fifa-keyV.vault.azure.net/"
+		}
+	}
+}

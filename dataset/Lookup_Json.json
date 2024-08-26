@@ -1,0 +1,33 @@
+{
+	"name": "Lookup_Json",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "LookupJSON.json",
+				"fileSystem": "lookup"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"BaseURL": {
+					"type": "string"
+				},
+				"RelativeURL": {
+					"type": "string"
+				},
+				"FileName": {
+					"type": "string"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

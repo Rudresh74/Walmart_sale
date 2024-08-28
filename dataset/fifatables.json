@@ -1,0 +1,18 @@
+{
+	"name": "fifatables",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "fifa-synapse-WorkspaceDefaultStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "finaldata"
+			}
+		}
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

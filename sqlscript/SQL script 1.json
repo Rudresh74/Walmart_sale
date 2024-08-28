@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 1",
+	"properties": {
+		"content": {
+			"query": "USE fifapool\nGO\n\n\nCREATE OR ALTER PROC CreateSQLServerlessView\n    @ViewName NVARCHAR(100)\nAS\nBEGIN\n    DECLARE @statement VARCHAR(MAX)\n\n    SET @statement = N'\n    CREATE OR ALTER VIEW ' + QUOTENAME(@ViewName) + ' AS\n    SELECT *\n    FROM\n    OPENROWSET(\n        BULK ''https://fifastrg2.dfs.core.windows.net/finaldata/' + @ViewName + '/'',\n        FORMAT = ''PARQUET''\n    ) AS [result]\n    '\n\n    EXEC (@statement)\nEND\nGO",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "fifapool",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

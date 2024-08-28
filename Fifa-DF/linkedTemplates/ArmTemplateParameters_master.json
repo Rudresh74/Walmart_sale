@@ -1,0 +1,36 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "Fifa-DF"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://fifastrg2.dfs.core.windows.net/"
+		},
+		"AzureKeyVaultWalmart_properties_typeProperties_baseUrl": {
+			"value": "https://fifa-keyV.vault.azure.net/"
+		},
+		"Http_allFiles_properties_typeProperties_url": {
+			"value": "@{linkedService().BaseURL}"
+		},
+		"OnPrimToAzure_properties_typeProperties_server": {
+			"value": "localhost"
+		},
+		"OnPrimToAzure_properties_typeProperties_database": {
+			"value": "walmartDB"
+		},
+		"OnPrimToAzure_properties_typeProperties_username": {
+			"value": "DBuser"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

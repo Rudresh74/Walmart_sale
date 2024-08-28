@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 3",
+	"properties": {
+		"content": {
+			"query": "CREATE TABLE Staging_Walmart (\n    Store INT,\n    Date DATE,\n    Weekly_Sales DECIMAL(10, 2),\n    Holiday_Flag TINYINT,\n    Temperature FLOAT,\n    Fuel_Price FLOAT,\n    CPI FLOAT,\n    Unemployment FLOAT\n)\nWITH (\n    DISTRIBUTION = ROUND_ROBIN,\n    HEAP\n);\n\n\nCOPY INTO Staging_Walmart\nFROM 'https://fifastrg2.dfs.core.windows.net/bronze/walmartDB.csv'\nWITH (\n    FILE_TYPE = 'CSV',\n    FIELDTERMINATOR = ',',\n    ROWTERMINATOR = '\\n',\n    FIRSTROW = 2\n);\n\n\nCREATE TABLE Silver_Walmart\nWITH (\n    DISTRIBUTION = HASH(Store),  \n    CLUSTERED COLUMNSTORE INDEX\n)\nAS\nSELECT\n    Store,\n    Date,\n    Weekly_Sales,\n    Holiday_Flag,\n    Temperature,\n    Fuel_Price,\n    CPI,\n    Unemployment\nFROM\n    Staging_Walmart\nWHERE\n    Weekly_Sales IS NOT NULL\n    AND Temperature IS NOT NULL\n    AND Unemployment >= 0;\n\n\n\n\nCREATE TABLE Walmart_Silver (\n    Store INT,\n    Date DATE,\n    Weekly_Sales DECIMAL(10, 2),\n    Holiday_Flag TINYINT,\n    Temperature FLOAT,\n    Fuel_Price FLOAT,\n    CPI FLOAT,\n    Unemployment FLOAT\n)\nWITH (\n    DISTRIBUTION = HASH(Store),  -- Explicitly define distribution strategy\n    CLUSTERED COLUMNSTORE INDEX\n);\n\n\nINSERT INTO Walmart_Silver\nSELECT\n    Store,\n    Date,\n    Weekly_Sales,\n    Holiday_Flag,\n    Temperature,\n    Fuel_Price,\n    CPI,\n    Unemployment\nFROM\n    Silver_Walmart;",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "walmartdedicatedpool",
+				"poolName": "walmartdedicatedpool"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

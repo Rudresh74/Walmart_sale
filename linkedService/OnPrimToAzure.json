@@ -1,0 +1,28 @@
+{
+	"name": "OnPrimToAzure",
+	"properties": {
+		"annotations": [],
+		"type": "MySql",
+		"typeProperties": {
+			"server": "localhost",
+			"port": 3306,
+			"database": "walmartDB",
+			"username": "DBuser",
+			"sslMode": 1,
+			"useSystemTrustStore": 0,
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "AzureKeyVaultWalmart",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "pass"
+			},
+			"driverVersion": "v2"
+		},
+		"connectVia": {
+			"referenceName": "SelfHosted",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

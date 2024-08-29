@@ -1,0 +1,55 @@
+{
+	"name": "SnowflakeTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Snowflake1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "STORE",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "DATE",
+				"type": "DATE"
+			},
+			{
+				"name": "WEEKLY_SALES",
+				"type": "NUMBER",
+				"precision": 10,
+				"scale": 2
+			},
+			{
+				"name": "HOLIDAY_FLAG",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "TEMPERATURE",
+				"type": "FLOAT"
+			},
+			{
+				"name": "FUEL_PRICE",
+				"type": "FLOAT"
+			},
+			{
+				"name": "CPI",
+				"type": "FLOAT"
+			},
+			{
+				"name": "UNEMPLOYMENT",
+				"type": "FLOAT"
+			}
+		],
+		"typeProperties": {
+			"schema": "PUBLIC",
+			"table": "WALMART_SALES"
+		}
+	}
+}

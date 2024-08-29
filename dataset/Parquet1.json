@@ -1,0 +1,68 @@
+{
+	"name": "Parquet1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "gold"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "Store",
+				"type": "INT_32"
+			},
+			{
+				"name": "Date",
+				"type": "DATE"
+			},
+			{
+				"name": "Weekly_Sales",
+				"type": "DECIMAL",
+				"precision": 10,
+				"scale": 2
+			},
+			{
+				"name": "Holiday_Flag",
+				"type": "INT_16"
+			},
+			{
+				"name": "Temperature",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Fuel_Price",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "CPI",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Unemployment",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Sales_Week_Diff",
+				"type": "DECIMAL",
+				"precision": 11,
+				"scale": 2
+			},
+			{
+				"name": "Avg_Temp_3Weeks",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Avg_FuelPrice_3Weeks",
+				"type": "DOUBLE"
+			}
+		]
+	}
+}

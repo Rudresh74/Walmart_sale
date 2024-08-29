@@ -8,6 +8,12 @@
 		"AzureDataLakeStorage1_accountKey": {
 			"value": ""
 		},
+		"AzureDatabricks1_accessToken": {
+			"value": ""
+		},
+		"Snowflake1_password": {
+			"value": ""
+		},
 		"fifa-synapse-WorkspaceDefaultSqlServer_connectionString": {
 			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:fifa-synapse.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
 		},
@@ -29,8 +35,14 @@
 		"OnPrimToAzure_properties_typeProperties_username": {
 			"value": "DBuser"
 		},
+		"Snowflake1_properties_typeProperties_database": {
+			"value": "SNOWFLAKEDATA"
+		},
 		"fifa-synapse-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://fifastrg2.dfs.core.windows.net"
+		},
+		"linkedService1_sasUri": {
+			"value": ""
 		},
 		"sqlserverlessdb_properties_typeProperties_server": {
 			"value": "fifa-synapse-ondemand.sql.azuresynapse.net"

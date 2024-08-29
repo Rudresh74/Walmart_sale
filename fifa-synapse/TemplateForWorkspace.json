@@ -11,6 +11,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
 		},
+		"AzureDatabricks1_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks1'"
+		},
+		"Snowflake1_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'Snowflake1'"
+		},
 		"fifa-synapse-WorkspaceDefaultSqlServer_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'fifa-synapse-WorkspaceDefaultSqlServer'",
@@ -40,9 +48,17 @@
 			"type": "string",
 			"defaultValue": "DBuser"
 		},
+		"Snowflake1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "SNOWFLAKEDATA"
+		},
 		"fifa-synapse-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://fifastrg2.dfs.core.windows.net"
+		},
+		"linkedService1_sasUri": {
+			"type": "secureString",
+			"metadata": "Secure string for 'sasUri' of 'linkedService1'"
 		},
 		"sqlserverlessdb_properties_typeProperties_server": {
 			"type": "string",
@@ -565,6 +581,24 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/AzureDatabricks1')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDatabricks",
+				"typeProperties": {
+					"domain": "https://adb-3393666274365208.8.azuredatabricks.net",
+					"accessToken": {
+						"type": "SecureString",
+						"value": "[parameters('AzureDatabricks1_accessToken')]"
+					},
+					"existingClusterId": "0820-154626-6o852esl"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/AzureKeyVaultWalmart')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -632,6 +666,27 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/Snowflake1')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "SnowflakeV2",
+				"typeProperties": {
+					"authenticationType": "Basic",
+					"accountIdentifier": "fm28354.canada-central.azure",
+					"user": "RUDRESH74",
+					"database": "[parameters('Snowflake1_properties_typeProperties_database')]",
+					"warehouse": "COMPUTE_WH",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('Snowflake1_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/fifa-synapse-WorkspaceDefaultSqlServer')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -673,6 +728,19 @@
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/linkedService1')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"sasUri": "[parameters('linkedService1_sasUri')]"
+				}
+			},
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/sqlserverlessdb')]",
@@ -749,6 +817,46 @@
 					"currentConnection": {
 						"databaseName": "fifapool",
 						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 2')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "-- This is auto-generated code\nSELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'https://fifastrg2.dfs.core.windows.net/bronze/walmartDB.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION = '2.0'\n    ) AS [result]\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "master",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 3')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "CREATE TABLE Staging_Walmart (\n    Store INT,\n    Date DATE,\n    Weekly_Sales DECIMAL(10, 2),\n    Holiday_Flag TINYINT,\n    Temperature FLOAT,\n    Fuel_Price FLOAT,\n    CPI FLOAT,\n    Unemployment FLOAT\n)\nWITH (\n    DISTRIBUTION = ROUND_ROBIN,\n    HEAP\n);\n\n\nCOPY INTO Staging_Walmart\nFROM 'https://fifastrg2.dfs.core.windows.net/bronze/walmartDB.csv'\nWITH (\n    FILE_TYPE = 'CSV',\n    FIELDTERMINATOR = ',',\n    ROWTERMINATOR = '\\n',\n    FIRSTROW = 2\n);\n\n\nCREATE TABLE Silver_Walmart\nWITH (\n    DISTRIBUTION = HASH(Store),  \n    CLUSTERED COLUMNSTORE INDEX\n)\nAS\nSELECT\n    Store,\n    Date,\n    Weekly_Sales,\n    Holiday_Flag,\n    Temperature,\n    Fuel_Price,\n    CPI,\n    Unemployment\nFROM\n    Staging_Walmart\nWHERE\n    Weekly_Sales IS NOT NULL\n    AND Temperature IS NOT NULL\n    AND Unemployment >= 0;\n\n\n\n\nCREATE TABLE Walmart_Silver (\n    Store INT,\n    Date DATE,\n    Weekly_Sales DECIMAL(10, 2),\n    Holiday_Flag TINYINT,\n    Temperature FLOAT,\n    Fuel_Price FLOAT,\n    CPI FLOAT,\n    Unemployment FLOAT\n)\nWITH (\n    DISTRIBUTION = HASH(Store),  -- Explicitly define distribution strategy\n    CLUSTERED COLUMNSTORE INDEX\n);\n\n\nINSERT INTO Walmart_Silver\nSELECT\n    Store,\n    Date,\n    Weekly_Sales,\n    Holiday_Flag,\n    Temperature,\n    Fuel_Price,\n    CPI,\n    Unemployment\nFROM\n    Silver_Walmart;",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "walmartdedicatedpool",
+						"poolName": "walmartdedicatedpool"
 					},
 					"resultLimit": 5000
 				},

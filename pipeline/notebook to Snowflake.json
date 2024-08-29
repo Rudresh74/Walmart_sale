@@ -23,7 +23,7 @@
 				}
 			},
 			{
-				"name": "Copy data1",
+				"name": "CopyTo Snowflake",
 				"type": "Copy",
 				"dependsOn": [
 					{
@@ -67,6 +67,121 @@
 							"type": "LinkedServiceReference"
 						},
 						"path": "staging"
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Store",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "STORE",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "Date",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "DATE",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "Weekly_Sales",
+									"type": "Decimal"
+								},
+								"sink": {
+									"name": "WEEKLY_SALES",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "Holiday_Flag",
+									"type": "Int16"
+								},
+								"sink": {
+									"name": "HOLIDAY_FLAG",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "Temperature",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "TEMPERATURE",
+									"type": "Double"
+								}
+							},
+							{
+								"source": {
+									"name": "Fuel_Price",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "FUEL_PRICE",
+									"type": "Double"
+								}
+							},
+							{
+								"source": {
+									"name": "CPI",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "CPI",
+									"type": "Double"
+								}
+							},
+							{
+								"source": {
+									"name": "Unemployment",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "UNEMPLOYMENT",
+									"type": "Double"
+								}
+							},
+							{
+								"source": {
+									"name": "Sales_Week_Diff",
+									"type": "Decimal"
+								},
+								"sink": {
+									"name": "SALES_WEEK_DIFF",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "Avg_Temp_3Weeks",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "AVG_TEMP_3WEEKS",
+									"type": "Double"
+								}
+							},
+							{
+								"source": {
+									"name": "Avg_FuelPrice_3Weeks",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "AVG_FUELPRICE_3WEEKS",
+									"type": "Double"
+								}
+							}
+						]
 					}
 				},
 				"inputs": [
